@@ -1,0 +1,6 @@
+Gitfetch is a command-line tool that displays information about the current project directory.
+
+By default it shows total size of the project, total amount of lines and language makeup.
+
+Flags:
+    
