@@ -1,7 +1,6 @@
 package main
 
 import (
-	"bufio"
 	"fmt"
 	"os"
 )
@@ -12,40 +11,32 @@ func ParseDirectory(name string) error {
 		return err
 	}
 
+	var files []*FileInfo
+
 	for _, entry := range entries {
 		if entry.IsDir() {
 			if err := ParseDirectory(name + "/" + entry.Name()); err != nil {
 				return err
 			}
 		} else {
-			if err := ParseFile(name + "/" + entry.Name()); err != nil {
+			fileInfo, err := ParseFile(name + "/" + entry.Name())
+			if err != nil {
 				return err
 			}
+
+			files = append(files, fileInfo)
 		}
 	}
 
-	return nil
-}
+	var totalSize int64
+	var totalLines int
 
-func ParseFile(name string) error {
-	f, err := os.Open(name)
-	if err != nil {
-		return err
-	}
-	defer f.Close()
-
-	sc := bufio.NewScanner(f)
-
-	var n int
-	for sc.Scan() {
-		n++
+	for _, file := range files {
+		totalSize += file.Size
+		totalLines += file.Lines
 	}
 
-	if err := sc.Err(); err != nil {
-		return err
-	}
-
-	fmt.Printf("File %s has %d lines.\n", name, n)
+	fmt.Printf("Size: %d, Lines: %d\n", totalSize, totalLines)
 
 	return nil
 }
