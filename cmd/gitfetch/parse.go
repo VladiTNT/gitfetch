@@ -1,21 +1,18 @@
 package main
 
 import (
-	"fmt"
 	"os"
 )
 
-func ParseDirectory(name string) error {
+func ParseDirectory(name string, files *[]*FileInfo) error {
 	entries, err := os.ReadDir(name)
 	if err != nil {
 		return err
 	}
 
-	var files []*FileInfo
-
 	for _, entry := range entries {
 		if entry.IsDir() {
-			if err := ParseDirectory(name + "/" + entry.Name()); err != nil {
+			if err := ParseDirectory(name+"/"+entry.Name(), files); err != nil {
 				return err
 			}
 		} else {
@@ -24,19 +21,9 @@ func ParseDirectory(name string) error {
 				return err
 			}
 
-			files = append(files, fileInfo)
+			*files = append(*files, fileInfo)
 		}
 	}
-
-	var totalSize int64
-	var totalLines int
-
-	for _, file := range files {
-		totalSize += file.Size
-		totalLines += file.Lines
-	}
-
-	fmt.Printf("Size: %d, Lines: %d\n", totalSize, totalLines)
 
 	return nil
 }
