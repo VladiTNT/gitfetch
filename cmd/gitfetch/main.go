@@ -1,20 +1,14 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"os"
+)
 
 func main() {
-	var files []*FileInfo
-	if err := ParseDirectory(".", &files); err != nil {
-		fmt.Printf("Error parsing directories: %v\n", err)
+	cli := NewCli()
+	if err := cli.Exec(); err != nil {
+		fmt.Fprintf(os.Stderr, "Error: %v\n", err)
+		os.Exit(1)
 	}
-
-	var totalSize int64
-	var totalLines int
-
-	for _, file := range files {
-		totalSize += file.Size
-		totalLines += file.Lines
-	}
-
-	fmt.Printf("Size: %d, Lines: %d\n", totalSize, totalLines)
 }
