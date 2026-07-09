@@ -8,12 +8,16 @@ import (
 type Cli struct {
 	Dir      *string
 	AvgChars *bool
+	NoSize   *bool
+	NoLines  *bool
 }
 
 func NewCli() *Cli {
 	cli := &Cli{
 		Dir:      flag.String("dir", ".", "directory"),
 		AvgChars: flag.Bool("avgchars", false, "average amount of chars per line"),
+		NoSize:   flag.Bool("nosize", false, "disable total project size"),
+		NoLines:  flag.Bool("nolines", false, "disable total project lines"),
 	}
 
 	flag.Parse()
@@ -29,16 +33,19 @@ func (c *Cli) Exec() error {
 		return err
 	}
 
-	var totalSize int64
-	var totalLines int
+	fmt.Println("Project statistics:")
 
-	for _, file := range files {
-		totalSize += file.Size
-		totalLines += file.Lines
+	if !*c.NoSize {
+		fmt.Printf("Total project size: %d bytes.\n", GetTotalSize(files))
 	}
 
-	fmt.Printf("Total size: %d\n", totalSize)
-	fmt.Printf("Total lines: %d\n", totalLines)
+	if !*c.NoLines {
+		fmt.Printf("Total lines: %d.\n", GetTotalLines(files))
+	}
+
+	if *c.AvgChars {
+		fmt.Printf("Average line length: %.2f.\n", GetTotalAvgChars(files))
+	}
 
 	return nil
 }

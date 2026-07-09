@@ -3,12 +3,15 @@ package main
 import (
 	"bufio"
 	"os"
+
+	"github.com/VladiTNT/gitfetch/pkg/files"
 )
 
 type FileInfo struct {
-	Size     int64
-	Lines    int
-	AvgChars int
+	Size      int64
+	Lines     int
+	AvgChars  float64
+	Extension string
 }
 
 func ParseFile(name string) (*FileInfo, error) {
@@ -43,7 +46,39 @@ func ParseFile(name string) (*FileInfo, error) {
 
 	// we divide total amount of characters by the amount of lines to get the
 	// average amount of characters in each line of code
-	fileInfo.AvgChars = totalCharAmount / fileInfo.Lines
+	fileInfo.AvgChars = float64(totalCharAmount) / float64(fileInfo.Lines)
+
+	fileInfo.Extension = files.GetFileExtension(name)
 
 	return fileInfo, nil
+}
+
+func GetTotalSize(files []*FileInfo) int64 {
+	var totalSize int64
+
+	for _, file := range files {
+		totalSize += file.Size
+	}
+
+	return totalSize
+}
+
+func GetTotalLines(files []*FileInfo) int {
+	var totalLines int
+
+	for _, file := range files {
+		totalLines += file.Lines
+	}
+
+	return totalLines
+}
+
+func GetTotalAvgChars(files []*FileInfo) float64 {
+	var totalAvgChars float64
+
+	for _, file := range files {
+		totalAvgChars += file.AvgChars
+	}
+
+	return totalAvgChars / float64(len(files))
 }
