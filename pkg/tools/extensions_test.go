@@ -1,9 +1,9 @@
-package files_test
+package tools_test
 
 import (
 	"testing"
 
-	"github.com/VladiTNT/gitfetch/pkg/files"
+	"github.com/VladiTNT/gitfetch/pkg/tools"
 )
 
 func TestGetFileExtension(t *testing.T) {
@@ -20,7 +20,7 @@ func TestGetFileExtension(t *testing.T) {
 	}
 
 	for i, testCase := range testCases {
-		result := files.GetFileExtension(testCase.Input)
+		result := tools.GetFileExtension(testCase.Input)
 		if result != testCase.Output {
 			t.Logf("Test case %d failed: wanted '%s', got '%s'\n", i, testCase.Output, result)
 		}

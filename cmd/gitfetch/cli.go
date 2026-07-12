@@ -11,23 +11,29 @@ type Cli struct {
 	NoLines  *bool
 	Nolang   *bool
 	AvgChars *bool
+	IgnEnt   *string
+	IgnExt   *string
+	NoDefEnt *bool
+	NoDefExt *bool
+	NoDefAss *bool
 
-	DefaultIgnoredEntries        []string
-	DefaultIgnoredFileExtensions []string
+	Ignores Ignores
 }
 
 func NewCli() *Cli {
 	cli := &Cli{
-		Dir:      flag.String("dir", ".", "directory"),
-		NoSize:   flag.Bool("nosize", false, "disable total project size"),
-		NoLines:  flag.Bool("nolines", false, "disable total project lines"),
-		Nolang:   flag.Bool("noalng", false, "disable language makeup"),
+		Dir:      flag.String("root", ".", "project root"),
+		NoSize:   flag.Bool("nosz", false, "disable total project size"),
+		NoLines:  flag.Bool("noln", false, "disable total project lines"),
+		Nolang:   flag.Bool("nolang", false, "disable language makeup"),
 		AvgChars: flag.Bool("avgchars", false, "average amount of chars per line"),
+		IgnEnt:   flag.String("ignent", "", "add more file entry ignores"),
+		IgnExt:   flag.String("ignext", "", "add more file extensions ignores"),
+		NoDefEnt: flag.Bool("nodefent", false, "no default entry ignores"),
+		NoDefExt: flag.Bool("nodefext", false, "no default extension ignores"),
+		NoDefAss: flag.Bool("nodefass", false, "no default asset ignores"),
 
-		DefaultIgnoredEntries: []string{
-			".git", ".gitignore",
-		},
-		DefaultIgnoredFileExtensions: []string{},
+		Ignores: NewIgnores(),
 	}
 
 	flag.Parse()
@@ -38,8 +44,11 @@ func NewCli() *Cli {
 func (c *Cli) Exec() error {
 	var files []*FileInfo
 
+	// Making final ignored extensions
+	finalIgnoredExtensions := append(c.Ignores.Extensions, c.Ignores.AssetExtensions...)
+
 	// Get all of the files in the project
-	if err := ParseDirectory(*c.Dir, &files, c.DefaultIgnoredEntries); err != nil {
+	if err := ParseDirectory(*c.Dir, &files, c.Ignores.Entries, finalIgnoredExtensions); err != nil {
 		return err
 	}
 

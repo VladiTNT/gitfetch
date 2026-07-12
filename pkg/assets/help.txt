@@ -1,0 +1,17 @@
+Gitfetch is a command-line tool that displays
+information about the current project directory.
+
+By default it shows total size of the project,
+total amount of lines and language makeup.
+
+Flags:
+    -root="...": specifies a subdirectory (default is ".")
+    -nosz: removes the total size of the project from the info message
+    -noln: removes the total amount of lines from the info message
+    -nolang: removes the langauge makeup from the info message
+    -avgchars: shows the average amount of characters on each line
+    -ignent="... ... ...": ignore files/folders with the provided names
+    -ignext="... ... ...": ignore files with the provided extensions
+    -nodefent: no default files/folder ignores (ex: .git, .gitignore, etc.)
+    -nodefext: no default extensions ignores (ex: mod, lock, env, etc.)
+    -nodefass: no default asset extensions ignores (ex: png, jpeg, txt, json)

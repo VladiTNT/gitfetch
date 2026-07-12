@@ -4,7 +4,7 @@ import (
 	"bufio"
 	"os"
 
-	"github.com/VladiTNT/gitfetch/pkg/files"
+	"github.com/VladiTNT/gitfetch/pkg/tools"
 )
 
 type FileInfo struct {
@@ -48,7 +48,7 @@ func ParseFile(name string) (*FileInfo, error) {
 	// average amount of characters in each line of code
 	fileInfo.AvgChars = float64(totalCharAmount) / float64(fileInfo.Lines)
 
-	fileInfo.Extension = files.GetFileExtension(name)
+	fileInfo.Extension = tools.GetFileExtension(name)
 
 	return fileInfo, nil
 }

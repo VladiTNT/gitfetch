@@ -1,0 +1,16 @@
+{
+    "entries": [
+        ".git", ".gitignore",
+        "README.md", "readme.md",
+        "Dockerfile", "docker-compose.yml"
+    ],
+    "extensions": [
+        "mod", "lock", "env"
+    ], 
+    "assets": [
+        "txt", "md",
+        "png", "jpeg", "jpg",
+        "mp3", "wav", "ogg", "vorbis",
+        "json", "toml", "yaml", "yml", "xml" 
+    ]
+}
